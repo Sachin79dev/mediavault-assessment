@@ -1,5 +1,15 @@
 {
   "framework": "vite",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/api/assets/:id",
+      "destination": "/api/asset?id=:id"
+    },
+    {
+      "source": "/api/thumb/:id.svg",
+      "destination": "/api/thumb?id=:id"
+    }
+  ]
 }
