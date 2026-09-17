@@ -1,5 +1,6 @@
 import http from "node:http";
 import { randomUUID } from "node:crypto";
+import { fileURLToPath } from "node:url";
 import {
   assets,
   COLLECTIONS,
@@ -502,9 +503,13 @@ const server = http.createServer(async (req, res) => {
   return fail(res, 404, "not_found", `No route for ${req.method} ${pathname}`);
 });
 
-server.listen(PORT, () => {
-  console.log(`mock api  →  http://localhost:${PORT}/api/health`);
-  console.log(
-    `chaos: ${CHAOS ? "on" : "off"}   latency: ${LATENCY ? "on" : "off"}`,
-  );
-});
+export const handler = (req, res) => server.emit("request", req, res);
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  server.listen(PORT, () => {
+    console.log(`mock api  →  http://localhost:${PORT}/api/health`);
+    console.log(
+      `chaos: ${CHAOS ? "on" : "off"}   latency: ${LATENCY ? "on" : "off"}`,
+    );
+  });
+}
